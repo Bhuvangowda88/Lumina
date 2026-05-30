@@ -1,0 +1,40 @@
+{
+  "entities": {
+    "Chat": {
+      "title": "Chat Session",
+      "description": "Represents a conversation between a user and the AI about a document.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The title of the chat thread." },
+        "userId": { "type": "string", "description": "The UID of the user who owns the chat." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the chat was started." },
+        "lastMessage": { "type": "string", "description": "Snippet of the last message." }
+      },
+      "required": ["userId", "createdAt"]
+    },
+    "Message": {
+      "title": "Chat Message",
+      "description": "A single entry in a chat session.",
+      "type": "object",
+      "properties": {
+        "chatId": { "type": "string", "description": "Relational ID of the parent chat." },
+        "role": { "type": "string", "enum": ["user", "assistant"] },
+        "content": { "type": "string", "description": "Markdown content of the message." },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "type": { "type": "string", "enum": ["text", "document-analysis"] },
+        "metadata": { "type": "object" }
+      },
+      "required": ["chatId", "role", "content", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/chats/{chatId}": {
+      "schema": "Chat",
+      "description": "User conversation threads."
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Messages within a specific chat thread."
+    }
+  }
+}
